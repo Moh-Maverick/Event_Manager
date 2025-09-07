@@ -1,7 +1,9 @@
 # Campus Event Management Reporting System
 
 ## Done By
-**Mohit** - Done for Webknot Technology (assignment)
+**Mohit R** - REVA University
+
+Purpose -  Assignment given by Webknot Technology 
 
 ## Project Summary
 
