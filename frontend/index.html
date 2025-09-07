@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Events Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-graduation-cap"></i> Campus Events Management</h1>
+                <nav class="nav">
+                    <button class="nav-btn active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </button>
+                    <button class="nav-btn" data-page="colleges">
+                        <i class="fas fa-university"></i> Colleges
+                    </button>
+                    <button class="nav-btn" data-page="students">
+                        <i class="fas fa-users"></i> Students
+                    </button>
+                    <button class="nav-btn" data-page="events">
+                        <i class="fas fa-calendar-alt"></i> Events
+                    </button>
+                    <button class="nav-btn" data-page="registrations">
+                        <i class="fas fa-clipboard-list"></i> Registrations
+                    </button>
+                    <button class="nav-btn" data-page="attendance">
+                        <i class="fas fa-check-circle"></i> Attendance
+                    </button>
+                    <button class="nav-btn" data-page="feedback">
+                        <i class="fas fa-comments"></i> Feedback
+                    </button>
+                    <button class="nav-btn" data-page="reports">
+                        <i class="fas fa-chart-bar"></i> Reports
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p>Overview of campus events and activities</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-colleges">-</h3>
+                            <p>Total Colleges</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-students">-</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="total-events">-</h3>
+                            <p>Total Events</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="avg-rating">-</h3>
+                            <p>Avg Rating</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Event Popularity</h3>
+                        <canvas id="eventPopularityChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Student Participation</h3>
+                        <canvas id="studentParticipationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colleges Page -->
+            <div id="colleges" class="page">
+                <div class="page-header">
+                    <h2>Colleges</h2>
+                    <p>Manage college information</p>
+                </div>
+                <div class="table-container">
+                    <table id="colleges-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Students Page -->
+            <div id="students" class="page">
+                <div class="page-header">
+                    <h2>Students</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddStudentModal()">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                    </div>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="student-search" placeholder="Search students..." onkeyup="searchStudents()">
+                </div>
+                <div class="table-container">
+                    <table id="students-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>College</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Events Page -->
+            <div id="events" class="page">
+                <div class="page-header">
+                    <h2>Events</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddEventModal()">
+                            <i class="fas fa-plus"></i> Add Event
+                        </button>
+                    </div>
+                </div>
+                <div class="filters-container">
+                    <select id="college-filter" onchange="filterEvents()">
+                        <option value="">All Colleges</option>
+                    </select>
+                </div>
+                <div class="table-container">
+                    <table id="events-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Capacity</th>
+                                <th>College</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Registrations Page -->
+            <div id="registrations" class="page">
+                <div class="page-header">
+                    <h2>Registrations</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showAddRegistrationModal()">
+                            <i class="fas fa-plus"></i> Register Student
+                        </button>
+                    </div>
+                </div>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="student-registrations">Student Registrations</button>
+                    <button class="tab-btn" data-tab="event-registrations">Event Registrations</button>
+                </div>
+                <div id="student-registrations" class="tab-content active">
+                    <div class="form-group">
+                        <label>Select Student:</label>
+                        <select id="student-select" onchange="loadStudentRegistrations()">
+                            <option value="">Choose a student...</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table id="student-registrations-table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="event-registrations" class="tab-content">
+                    <div class="form-group">
+                        <label>Select Event:</label>
+                        <select id="event-select" onchange="loadEventRegistrations()">
+                            <option value="">Choose an event...</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table id="event-registrations-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Email</th>
+                                    <th>College</th>
+                                    <th>Status</th>
+                                    <th>Registered</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Page -->
+            <div id="attendance" class="page">
+                <div class="page-header">
+                    <h2>Attendance</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showMarkAttendanceModal()">
+                            <i class="fas fa-check"></i> Mark Attendance
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Select Event:</label>
+                    <select id="attendance-event-select" onchange="loadAttendanceReport()">
+                        <option value="">Choose an event...</option>
+                    </select>
+                </div>
+                <div id="attendance-summary" class="summary-cards" style="display: none;">
+                    <div class="summary-card">
+                        <h3 id="total-registrations">0</h3>
+                        <p>Total Registrations</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="total-attendance">0</h3>
+                        <p>Total Attendance</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="attendance-rate">0%</h3>
+                        <p>Attendance Rate</p>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Email</th>
+                                <th>Attended</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Feedback Page -->
+            <div id="feedback" class="page">
+                <div class="page-header">
+                    <h2>Feedback</h2>
+                    <div class="page-actions">
+                        <button class="btn btn-primary" onclick="showSubmitFeedbackModal()">
+                            <i class="fas fa-comment"></i> Submit Feedback
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Select Event:</label>
+                    <select id="feedback-event-select" onchange="loadEventFeedback()">
+                        <option value="">Choose an event...</option>
+                    </select>
+                </div>
+                <div id="feedback-summary" class="summary-cards" style="display: none;">
+                    <div class="summary-card">
+                        <h3 id="total-feedback">0</h3>
+                        <p>Total Feedback</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="avg-feedback-rating">0.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+                <div class="feedback-container" id="feedback-list"></div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reports" class="page">
+                <div class="page-header">
+                    <h2>Reports & Analytics</h2>
+                    <p>Comprehensive insights and statistics</p>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-section">
+                        <h3>Event Popularity</h3>
+                        <div class="table-container">
+                            <table id="event-popularity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Event</th>
+                                        <th>College</th>
+                                        <th>Registrations</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <h3>Student Participation</h3>
+                        <div class="table-container">
+                            <table id="student-participation-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>College</th>
+                                        <th>Events Attended</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="report-section">
+                        <h3>Top Students</h3>
+                        <div class="table-container">
+                            <table id="top-students-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>College</th>
+                                        <th>Total Events</th>
+                                        <th>Attended</th>
+                                        <th>Participation Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal Title</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
