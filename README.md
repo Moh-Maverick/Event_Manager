@@ -66,7 +66,7 @@ This prototype project demonstrates how a simple system can be helpful given ins
 ## How to Run 
 
 ### Using Hosted URL 
-`https://www.demo.netlify.com`
+`https://clgeventmanager.netlify.app/`
 
 ### (OR) Running on your Systems( recommended for developers)
 #### Backend
